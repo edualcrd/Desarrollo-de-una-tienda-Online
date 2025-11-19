@@ -1,0 +1,12 @@
+{
+    "token_key": "MiTokenSecreto12345",
+    "categorias": [
+        {"id": 1, "nombre": "Electrónica"},
+        {"id": 2, "nombre": "Ropa"}
+    ],
+    "productos": [
+        {"id": 101, "nombre": "Laptop Ultraligera", "precio": 1200.00, "destacado": true, "id_categoria": 1},
+        {"id": 102, "nombre": "Smartwatch V4", "precio": 250.50, "destacado": true, "id_categoria": 1},
+        {"id": 201, "nombre": "Camiseta Algodón", "precio": 25.99, "destacado": false, "id_categoria": 2}
+    ]
+}

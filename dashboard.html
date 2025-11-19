@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Tienda Online</title>
+    <link rel="stylesheet" href="/Desarrollo-de-una-tienda-Online/assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+        <nav>
+            <a href="/Desarrollo-de-una-tienda-Online/categories.html">Categorías</a> | 
+            <a href="/Desarrollo-de-una-tienda-Online/cart.html">Carrito</a> | 
+            <button id="logout-btn">Cerrar Sesión</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Productos Destacados (Cargados desde LocalStorage)</h2>
+        <div id="featured-products" class="product-grid">
+            </div>
+        
+        <hr>
+        
+        <h2>Recomendaciones (Productos Vistos Recientemente)</h2>
+        <div id="recent-views" class="product-list">
+            </div>
+    </main>
+    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/store.js"></script>
+    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/main.js"></script>
+    <script type="module">
+        import { getStoreData, addToCart } from '/Desarrollo-de-una-tienda-Online/assets/js/store.js';
+
+        // Lógica específica del Dashboard: Cargar productos destacados desde LocalStorage
+        const { productos } = getStoreData();
+        const featured = productos.filter(p => p.destacado);
+        
+        const container = document.getElementById('featured-products');
+        featured.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <h3>${product.nombre}</h3>
+                <p>Precio: ${product.precio}€</p>
+                <button onclick="window.location.href='product.html?id=${product.id}'">Ver Detalle</button>
+                <button onclick="addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">Añadir al Carrito</button>
+            `;
+            container.appendChild(card);
+        });
+
+        // Hacer la función addToCart global o accesible para el botón
+        window.addToCart = addToCart; 
+    </script>
+</body>
+</html>

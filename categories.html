@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías | Tienda Online</title>
+    <link rel="stylesheet" href="/Desarrollo-de-una-tienda-Online/assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>📚 Categorías de Productos</h1>
+        <nav>
+            <a href="/Desarrollo-de-una-tienda-Online/dashboard.html">Dashboard</a> | 
+            <a href="/Desarrollo-de-una-tienda-Online/cart.html">Carrito</a> | 
+            <button id="logout-btn">Cerrar Sesión</button>
+        </nav>
+    </header>
+    <main>
+        <div id="category-list" class="category-list">
+            <h2>Selecciona una Categoría</h2>
+            </div>
+        
+        <hr>
+        
+        <div id="product-listing">
+            </div>
+    </main>
+    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/store.js"></script>
+    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/main.js"></script>
+    <script type="module">
+        import { getStoreData, addToCart } from '/Desarrollo-de-una-tienda-Online/assets/js/store.js';
+
+        window.addToCart = addToCart; // Hacer addToCart global
+        
+        const { categorias, productos } = getStoreData(); // Cargar todo desde LocalStorage [cite: 79, 80]
+        const categoryListContainer = document.getElementById('category-list');
+        const productListingContainer = document.getElementById('product-listing');
+        
+        // --- 1. Renderizar la lista de categorías ---
+        categorias.forEach(cat => {
+            const button = document.createElement('button');
+            button.textContent = cat.nombre;
+            button.onclick = () => showProducts(cat.id, cat.nombre);
+            categoryListContainer.appendChild(button);
+        });
+
+        // --- 2. Función para mostrar productos de una categoría ---
+        function showProducts(categoryId, categoryName) {
+            // Filtrar productos desde LocalStorage [cite: 81, 82]
+            const filteredProducts = productos.filter(p => p.id_categoria === categoryId);
+
+            productListingContainer.innerHTML = `<h2>Productos en ${categoryName}</h2><div class="product-grid"></div>`;
+            const grid = productListingContainer.querySelector('.product-grid');
+
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="assets/images/${product.imagen}" alt="${product.nombre}">
+                    <h3>${product.nombre}</h3>
+                    <p class="price">${product.precio}€</p>
+                    <button onclick="window.location.href='product.html?id=${product.id}'">Ver Detalle</button>
+                    <button onclick='window.addToCart(${JSON.stringify(product).replace(/'/g, "\\'")})'>Añadir al Carrito</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        // Mostrar la primera categoría por defecto al cargar
+        if (categorias.length > 0) {
+            showProducts(categorias[0].id, categorias[0].nombre);
+        }
+    </script>
+</body>
+</html>

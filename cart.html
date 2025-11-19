@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras | Tienda Online</title>
+    <link rel="stylesheet" href="/Desarrollo-de-una-tienda-Online/assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>🛒 Carrito de Compras</h1>
+        <nav>
+            <a href="/Desarrollo-de-una-tienda-Online/dashboard.html">Dashboard</a> | 
+            <a href="/Desarrollo-de-una-tienda-Online/categories.html">Categorías</a> | 
+            <button id="logout-btn">Cerrar Sesión</button>
+        </nav>
+    </header>
+    <main>
+        <div id="cart-items">
+            </div>
+        
+        <div id="cart-summary">
+            <h3>Resumen del Pedido</h3>
+            <p>Total: <span id="cart-total">0.00€</span></p>
+            <button id="checkout-btn">Realizar Pedido [cite: 89]</button>
+            <button id="clear-cart-btn">Vaciar Carrito</button>
+        </div>
+    </main>
+    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/store.js"></script>
+    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/main.js"></script>
+    <script type="module">
+        import { getCart, updateCartQuantity, clearCart, getAuthToken } from '/Desarrollo-de-una-tienda-Online/assets/js/store.js';
+
+        const cartContainer = document.getElementById('cart-items');
+        const totalSpan = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const clearBtn = document.getElementById('clear-cart-btn');
+        const API_URL = '/Desarrollo-de-una-tienda-Online/api/';
+
+        let currentCart = [];
+
+        // --- Funciones de Renderizado y Cálculo ---
+
+        function renderCart() {
+            currentCart = getCart(); // Cargar carrito desde LocalStorage [cite: 88]
+            cartContainer.innerHTML = '';
+            let total = 0;
+
+            if (currentCart.length === 0) {
+                cartContainer.innerHTML = '<p>Tu carrito está vacío.</p>';
+                checkoutBtn.disabled = true;
+            } else {
+                checkoutBtn.disabled = false;
+                
+                currentCart.forEach(item => {
+                    const itemTotal = item.precio * item.quantity;
+                    total += itemTotal;
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <h4>${item.nombre}</h4>
+                        <p>Precio Unitario: ${item.precio}€</p>
+                        <label for="qty-${item.id}">Cantidad:</label>
+                        <input type="number" id="qty-${item.id}" value="${item.quantity}" min="0" style="width: 50px;">
+                        <p>Subtotal: ${itemTotal.toFixed(2)}€</p>
+                    `;
+                    cartContainer.appendChild(itemDiv);
+                    
+                    // Listener para actualizar cantidad
+                    document.getElementById(`qty-${item.id}`).addEventListener('change', (e) => {
+                        const newQty = parseInt(e.target.value) || 0;
+                        updateCartQuantity(item.id, newQty);
+                        renderCart(); // Re-renderizar después de actualizar
+                    });
+                });
+            }
+            totalSpan.textContent = total.toFixed(2) + '€';
+        }
+        
+        // --- Event Handlers ---
+
+        async function handleCheckout() {
+            if (currentCart.length === 0) return;
+
+            // 1. Enviar el carrito al servidor para validación [cite: 89]
+            try {
+                const response = await fetch(API_URL + '/Desarrollo-de-una-tienda-Online/api/carrito.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Enviar el token de autenticación [cite: 60]
+                        'Authorization': getAuthToken() 
+                    },
+                    // Solo enviamos los datos necesarios para la validación de precios en el servidor
+                    body: JSON.stringify({ 
+                        cart: currentCart.map(item => ({ 
+                            id: item.id, 
+                            precio: item.precio, // El servidor valida que este precio sea el correcto [cite: 90]
+                            quantity: item.quantity 
+                        }))
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    alert(data.message);
+                    clearCart(); // 2. Vaciar carrito del LocalStorage [cite: 91]
+                    renderCart(); 
+                } else {
+                    alert(data.message || 'Error al procesar el pedido. Inténtalo de nuevo.');
+                }
+
+            } catch (error) {
+                console.error('Error de red durante el checkout:', error);
+                alert('Ocurrió un error de conexión al realizar el pedido.');
+            }
+        }
+        
+        function handleClearCart() {
+            if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                clearCart();
+                renderCart();
+            }
+        }
+
+        checkoutBtn.addEventListener('click', handleCheckout);
+        clearBtn.addEventListener('click', handleClearCart);
+
+        // --- Inicialización ---
+        renderCart();
+    </script>
+</body>
+</html>
