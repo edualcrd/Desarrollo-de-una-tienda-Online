@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="product-title">Ficha de Producto | Tienda Online</title>
-    <link rel="stylesheet" href="/Desarrollo-de-una-tienda-Online/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <header>
         <h1>🔍 Ficha de Producto</h1>
         <nav>
-            <a href="/Desarrollo-de-una-tienda-Online/dashboard.html">Dashboard</a> | 
-            <a href="/Desarrollo-de-una-tienda-Online/categories.html">Categorías</a> | 
-            <a href="/Desarrollo-de-una-tienda-Online/cart.html">Carrito</a> | 
+            <a href="dashboard.html">Dashboard</a> | 
+            <a href="categories.html">Categorías</a> | 
+            <a href="cart.html">Carrito</a> | 
             <button id="logout-btn">Cerrar Sesión</button>
         </nav>
     </header>
     <main id="product-detail">
         </main>
-    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/store.js"></script>
-    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/main.js"></script>
+    <script type="module" src="assets/js/store.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
     <script type="module">
-        import { getProductById, addToCart, addRecentView } from '/Desarrollo-de-una-tienda-Online/assets/js/store.js';
-
-        window.addToCart = addToCart; // Hacer addToCart global
+        import { getProductById, addToCart, addRecentView } from './assets/js/store.js';
+        
+        window.addToCart = addToCart; 
         
         const detailContainer = document.getElementById('product-detail');
         const urlParams = new URLSearchParams(window.location.search);
@@ -32,11 +32,9 @@
         if (!productId) {
             detailContainer.innerHTML = '<p>Error: ID de producto no especificado.</p>';
         } else {
-            // Obtener producto desde LocalStorage [cite: 84, 85]
             const product = getProductById(productId);
 
             if (product) {
-                // Almacenar en LocalStorage como "visto recientemente" [cite: 94]
                 addRecentView(product.id); 
 
                 document.getElementById('product-title').textContent = product.nombre + ' | Tienda Online';
@@ -50,7 +48,7 @@
                             <p>Categoría ID: ${product.id_categoria}</p>
                             <p>Descripción: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                             <input type="number" id="product-quantity" value="1" min="1" style="width: 50px; margin-right: 10px;">
-                            <button id="add-to-cart-btn">Añadir al Carrito [cite: 86]</button>
+                            <button id="add-to-cart-btn">Añadir al Carrito</button>
                         </div>
                     </div>
                 `;

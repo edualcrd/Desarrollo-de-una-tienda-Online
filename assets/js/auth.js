@@ -1,40 +1,46 @@
-import { setAuthData } from '/Desarrollo-de-una-tienda-Online/assets/js/store.js';
+import { getAuthToken, setAuthData, logout } from './store.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
+// URL base de la API (asumiendo que está en el mismo host)
+const API_URL = 'api/'; 
+
+// Función para verificar la autenticación en páginas protegidas
+export function checkAuthentication() {
+    if (!getAuthToken()) {
+        alert('Sesión expirada o no iniciada. Redirigiendo al login.');
+        // Usamos logout() para limpiar por si hay datos residuales
+        logout(); 
     }
-});
+}
 
-async function handleLogin(event) {
+// Lógica de Login (Usada en login.html)
+export async function handleLogin(event) {
     event.preventDefault();
     
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('/Desarrollo-de-una-tienda-Online/api/login.php', {
+        const response = await fetch(API_URL + 'login.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
 
-        if (data.success) {
-            [cite_start]// 1. Almacenar Token y Data de la tienda [cite: 65, 169]
+        if (response.ok && data.success) {
+            // 1. Almacenar Token y Data de la tienda en LocalStorage
             setAuthData(data.token, data.store_data); 
-            [cite_start]// 2. Redirigir al Dashboard [cite: 66]
-            window.location.href = '/Desarrollo-de-una-tienda-Online/dashboard.html'; 
+            // 2. Redirigir al Dashboard
+            window.location.href = 'dashboard.html'; 
         } else {
+            // Maneja 401 (Unauthorized) del PHP
             alert(data.error || 'Login fallido. Verifica tus credenciales.');
         }
 
     } catch (error) {
-        console.error('Error de red durante el login:', error);
-        alert('Ocurrió un error al intentar iniciar sesión.');
+        // Maneja errores de red o el código 500 (Internal Server Error)
+        console.error('Error de red durante el login o fallo de servidor:', error);
+        alert('Ocurrió un error al intentar iniciar sesión. Verifique la consola o el log del servidor.');
     }
 }

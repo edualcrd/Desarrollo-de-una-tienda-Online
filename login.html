@@ -2,20 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Tienda Online</title>
-    <link rel="stylesheet" href="/Desarrollo-de-una-tienda-Online/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="login-page">
-    <header><h1>Tienda Online - Iniciar Sesión</h1></header>
+    <header>
+        <h1>🛒 Tienda Online</h1>
+        <h2>Inicio de Sesión</h2>
+    </header>
     <main>
         <form id="login-form">
             <label for="username">Usuario:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" required value="user"> 
             <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required value="pass">
             <button type="submit">Acceder</button>
         </form>
     </main>
-    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/auth.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>

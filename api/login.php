@@ -1,5 +1,6 @@
 <?php
-require_once 'utils.php';
+// Ambos archivos están en la carpeta api/, no requiere '../'
+require_once 'utils.php'; 
 
 // Solo procesamos peticiones POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -8,21 +9,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// Obtener y decodificar el cuerpo de la petición JSON
 $input = json_decode(file_get_contents("php://input"), true);
 $username = $input['username'] ?? '';
 $password = $input['password'] ?? '';
 
-// Cargar usuarios
-if (!file_exists($USERS_DATA_PATH)) {
-    http_response_code(500);
-    echo json_encode(["error" => "Error interno del servidor: Archivo de usuarios no encontrado."]);
-    exit;
-}
-$users = json_decode(file_get_contents($USERS_DATA_PATH), true);
+// Cargar usuarios usando la función corregida de utils.php
+$users = loadUsersData();
 
 $authenticated = false;
 foreach ($users as $user) {
-    // Simulación de verificación de credenciales
+    // Verificación de credenciales
     if ($user['username'] === $username && $user['password'] === $password) {
         $authenticated = true;
         break;
@@ -35,11 +32,11 @@ if ($authenticated) {
     // Devolver el token y la información de la tienda
     echo json_encode([
         "success" => true,
-        // Se excluye la clave del token de la data de la tienda que va al cliente, por seguridad
+        "token" => $storeData['token_key'], //
         "store_data" => [ 
             "categorias" => $storeData['categorias'],
             "productos" => $storeData['productos']
-        ]
+        ] //
     ]);
 } else {
     http_response_code(401); // Unauthorized

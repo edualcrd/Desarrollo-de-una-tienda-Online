@@ -2,17 +2,17 @@
 const STORAGE_KEYS = {
     TOKEN: 'authToken',
     STORE_DATA: 'storeData',
-    CART: 'cart',
+    CART: 'cart', 
     RECENT_VIEWS: 'recentViews'
 };
 
 // --- GETTERS ---
 export function getAuthToken() {
-    return localStorage.getItem(STORAGE_KEYS.TOKEN);
+    return localStorage.getItem(STORAGE_KEYS.TOKEN); 
 }
 
 export function getStoreData() {
-    const data = localStorage.getItem(STORAGE_KEYS.STORE_DATA);
+    const data = localStorage.getItem(STORAGE_KEYS.STORE_DATA); 
     return data ? JSON.parse(data) : { categorias: [], productos: [] };
 }
 
@@ -44,7 +44,7 @@ export function addToCart(product, quantity = 1) {
     if (existing) {
         existing.quantity += quantity;
     } else {
-        // Aseguramos que solo guardamos datos esenciales para la validación (id, nombre, precio)
+        // Solo guardamos datos esenciales para la validación (id, nombre, precio)
         cart.push({ 
             id: product.id, 
             nombre: product.nombre, 
@@ -78,11 +78,9 @@ export function clearCart() {
 export function addRecentView(productId) {
     let views = getRecentViews();
     
-    // Eliminar si ya existe y añadir al principio
     views = views.filter(id => id !== productId);
     views.unshift(productId); 
     
-    // Limitar el historial
     if (views.length > 5) {
         views.pop();
     }
@@ -92,9 +90,9 @@ export function addRecentView(productId) {
 
 // Cierre de sesión (Limpieza total de LocalStorage)
 export function logout() {
-    localStorage.removeItem(STORAGE_KEYS.TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.STORE_DATA);
-    localStorage.removeItem(STORAGE_KEYS.RECENT_VIEWS);
-    localStorage.removeItem(STORAGE_KEYS.CART);
-    window.location.href = '/Desarrollo-de-una-tienda-Online/login.html';
+    localStorage.removeItem(STORAGE_KEYS.TOKEN); 
+    localStorage.removeItem(STORAGE_KEYS.STORE_DATA); 
+    localStorage.removeItem(STORAGE_KEYS.RECENT_VIEWS); 
+    localStorage.removeItem(STORAGE_KEYS.CART); 
+    window.location.href = 'login.html';
 }

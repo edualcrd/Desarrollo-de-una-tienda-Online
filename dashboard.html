@@ -2,53 +2,81 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Tienda Online</title>
-    <link rel="stylesheet" href="/Desarrollo-de-una-tienda-Online/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <header>
-        <h1>Dashboard</h1>
+        <h1>🏠 Dashboard de la Tienda</h1>
         <nav>
-            <a href="/Desarrollo-de-una-tienda-Online/categories.html">Categorías</a> | 
-            <a href="/Desarrollo-de-una-tienda-Online/cart.html">Carrito</a> | 
+            <a href="categories.html">Categorías</a> | 
+            <a href="cart.html">Carrito</a> | 
             <button id="logout-btn">Cerrar Sesión</button>
         </nav>
     </header>
     <main>
-        <h2>Productos Destacados (Cargados desde LocalStorage)</h2>
+        <h2>✨ Productos Destacados</h2>
+        <p>Cargados directamente desde su LocalStorage después del login.</p>
         <div id="featured-products" class="product-grid">
             </div>
         
         <hr>
         
-        <h2>Recomendaciones (Productos Vistos Recientemente)</h2>
-        <div id="recent-views" class="product-list">
+        <h2>👁️ Vistos Recientemente</h2>
+        <div id="recent-views" class="product-grid">
             </div>
     </main>
-    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/store.js"></script>
-    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/main.js"></script>
+    <script type="module" src="assets/js/store.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
     <script type="module">
-        import { getStoreData, addToCart } from '/Desarrollo-de-una-tienda-Online/assets/js/store.js';
-
-        // Lógica específica del Dashboard: Cargar productos destacados desde LocalStorage
+        import { getStoreData, addToCart, getRecentViews, getProductById } from './assets/js/store.js';
+        
+        // Hacer addToCart global para los botones
+        window.addToCart = addToCart; 
+        
+        // --- 1. Cargar Productos Destacados ---
         const { productos } = getStoreData();
         const featured = productos.filter(p => p.destacado);
         
-        const container = document.getElementById('featured-products');
-        featured.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `
-                <h3>${product.nombre}</h3>
-                <p>Precio: ${product.precio}€</p>
-                <button onclick="window.location.href='product.html?id=${product.id}'">Ver Detalle</button>
-                <button onclick="addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">Añadir al Carrito</button>
-            `;
-            container.appendChild(card);
-        });
+        const featuredContainer = document.getElementById('featured-products');
+        
+        if (featured.length === 0) {
+             featuredContainer.innerHTML = '<p>No hay productos destacados.</p>';
+        } else {
+             featured.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="assets/images/${product.imagen}" alt="${product.nombre}">
+                    <h3>${product.nombre}</h3>
+                    <p class="price">${product.precio}€</p>
+                    <button onclick="window.location.href='product.html?id=${product.id}'">Ver Detalle</button>
+                    <button onclick='window.addToCart(${JSON.stringify(product).replace(/'/g, "\\'")})'>Añadir al Carrito</button>
+                `;
+                featuredContainer.appendChild(card);
+            });
+        }
+        
+        // --- 2. Cargar Productos Vistos Recientemente ---
+        const recentIds = getRecentViews();
+        const recentProducts = recentIds.map(id => getProductById(id)).filter(p => p !== undefined);
+        const recentContainer = document.getElementById('recent-views');
 
-        // Hacer la función addToCart global o accesible para el botón
-        window.addToCart = addToCart; 
+        if (recentProducts.length > 0) {
+            recentProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card mini';
+                 card.innerHTML = `
+                    <h4>${product.nombre}</h4>
+                    <p class="price">${product.precio}€</p>
+                    <a href="product.html?id=${product.id}">Ver</a>
+                `;
+                recentContainer.appendChild(card);
+            });
+        } else {
+            recentContainer.innerHTML = '<p>Visita algunos productos para ver recomendaciones aquí.</p>';
+        }
     </script>
 </body>
 </html>

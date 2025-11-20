@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categorías | Tienda Online</title>
-    <link rel="stylesheet" href="/Desarrollo-de-una-tienda-Online/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <header>
         <h1>📚 Categorías de Productos</h1>
         <nav>
-            <a href="/Desarrollo-de-una-tienda-Online/dashboard.html">Dashboard</a> | 
-            <a href="/Desarrollo-de-una-tienda-Online/cart.html">Carrito</a> | 
+            <a href="dashboard.html">Dashboard</a> | 
+            <a href="cart.html">Carrito</a> | 
             <button id="logout-btn">Cerrar Sesión</button>
         </nav>
     </header>
@@ -25,14 +25,14 @@
         <div id="product-listing">
             </div>
     </main>
-    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/store.js"></script>
-    <script type="module" src="/Desarrollo-de-una-tienda-Online/assets/js/main.js"></script>
+    <script type="module" src="assets/js/store.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
     <script type="module">
-        import { getStoreData, addToCart } from '/Desarrollo-de-una-tienda-Online/assets/js/store.js';
-
-        window.addToCart = addToCart; // Hacer addToCart global
+        import { getStoreData, addToCart } from './assets/js/store.js';
         
-        const { categorias, productos } = getStoreData(); // Cargar todo desde LocalStorage [cite: 79, 80]
+        window.addToCart = addToCart; 
+        
+        const { categorias, productos } = getStoreData(); // Cargar todo desde LocalStorage
         const categoryListContainer = document.getElementById('category-list');
         const productListingContainer = document.getElementById('product-listing');
         
@@ -46,7 +46,6 @@
 
         // --- 2. Función para mostrar productos de una categoría ---
         function showProducts(categoryId, categoryName) {
-            // Filtrar productos desde LocalStorage [cite: 81, 82]
             const filteredProducts = productos.filter(p => p.id_categoria === categoryId);
 
             productListingContainer.innerHTML = `<h2>Productos en ${categoryName}</h2><div class="product-grid"></div>`;
@@ -66,7 +65,6 @@
             });
         }
         
-        // Mostrar la primera categoría por defecto al cargar
         if (categorias.length > 0) {
             showProducts(categorias[0].id, categorias[0].nombre);
         }
