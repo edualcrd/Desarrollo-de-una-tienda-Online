@@ -5,9 +5,9 @@
         {"id": 2, "nombre": "Ropa", "imagen": "clothing.jpg"}
     ],
     "productos": [
-        {"id": 101, "nombre": "Laptop Ultraligera", "precio": 1200.00, "destacado": true, "id_categoria": 1, "imagen": "https://pe-media.hptiendaenlinea.com/wysiwyg/HP_PAviion_Aero_13.png"},
-        {"id": 102, "nombre": "Smartwatch V4", "precio": 250.50, "destacado": true, "id_categoria": 1, "imagen": "https://www.dcutec.com/3931-large_default/smartwatch-colorful-2-blanco-rojo.jpg"},
-        {"id": 201, "nombre": "Camiseta Algodón", "precio": 25.99, "destacado": false, "id_categoria": 2, "imagen": "tshirt.jpg"},
-        {"id": 202, "nombre": "Zapatillas Deportivas", "precio": 89.99, "destacado": true, "id_categoria": 2, "imagen": "shoes.jpg"}
+        {"id": 101, "nombre": "Laptop Ultraligera", "precio": 1200.00, "destacado": true, "id_categoria": 1, "imagen": "../img/portatil.jpg"},
+        {"id": 102, "nombre": "Smartwatch V4", "precio": 250.50, "destacado": true, "id_categoria": 1, "imagen": "../img/reloj.jpg"},
+        {"id": 201, "nombre": "Camiseta Algodón", "precio": 25.99, "destacado": false, "id_categoria": 2, "imagen": "../img/camiseta.webp"},
+        {"id": 202, "nombre": "Zapatillas Deportivas", "precio": 89.99, "destacado": true, "id_categoria": 2, "imagen": "../img/zapatillas.avif"}
     ]
 }
