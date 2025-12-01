@@ -1,13 +1,13 @@
 {
     "token_key": "MiTokenSecreto12345",
     "categorias": [
-        {"id": 1, "nombre": "Electrónica", "imagen": "electronics.jpg"},
-        {"id": 2, "nombre": "Ropa", "imagen": "clothing.jpg"}
+        {"id": 1, "nombre": "Dispositivos", "imagen": "electronics.jpg"},
+        {"id": 2, "nombre": "Perifericos", "imagen": "periferics.jpg"}
     ],
     "productos": [
         {"id": 101, "nombre": "Laptop Ultraligera", "precio": 1200.00, "destacado": true, "id_categoria": 1, "imagen": "../img/portatil.jpg"},
         {"id": 102, "nombre": "Smartwatch V4", "precio": 250.50, "destacado": true, "id_categoria": 1, "imagen": "../img/reloj.jpg"},
-        {"id": 201, "nombre": "Camiseta Algodón", "precio": 25.99, "destacado": false, "id_categoria": 2, "imagen": "../img/camiseta.webp"},
-        {"id": 202, "nombre": "Zapatillas Deportivas", "precio": 89.99, "destacado": true, "id_categoria": 2, "imagen": "../img/zapatillas.avif"}
+        {"id": 103, "nombre": "Iphone 16", "precio":1249.99, "destacado": false, "id_categoria": 1, "imagen": "../img/iphone16.avif"},
+        {"id": 201, "nombre": "Teclado Logitech", "precio": 89.99, "destacado": true, "id_categoria": 2, "imagen": "../img/teclado.jpg"}
     ]
 }
